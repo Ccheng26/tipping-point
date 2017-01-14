@@ -3,5 +3,7 @@ Rails.application.routes.draw do
   resources :races
   root to: "races#index"
   get '/getdata', to: 'races#getdata'
+  get '/nearby', to: 'races#nearby'
+  get '/myrep', to: 'races#myrep'
 
 end

@@ -6,6 +6,10 @@ $('#myCarousel').carousel({
 });
   var geocoder;
 
+//in find close races, grab congressional districts from keys
+//find service to convert CD to coordinates/zip code
+//run zip code/coords through google maps
+
 
   //Get the latitude and the longitude;
   function successFunction(position) {
@@ -39,6 +43,7 @@ $('#myCarousel').carousel({
   }
 
   function findCloseRaces(data){
+    console.log(data)
     $.each(data, function(key, val){
       var r = arrAv(val.r)
       var d = arrAv(val.d)
@@ -87,10 +92,18 @@ $('#myCarousel').carousel({
             var newObj = raceHolder[value.topic]
             newObj.moe.push(value.subpopulations[0].margin_of_error)
             $(value.subpopulations[0].responses).each(function(index, value){
-              if(value.choice.includes('Dem')||value.choice.includes('(D)')){
+              if(value.party===null){
+                if(value.choice.includes('Dem')||value.choice.includes('(D)')){
+                  newObj.d.push(value.value)
+                }
+                else if(value.choice.includes('Rep')||value.choice.includes('(R)')){
+                  newObj.r.push(value.value)
+                }
+              }
+              else if(value.party.includes('Dem')||value.party.includes('(D)')){
                 newObj.d.push(value.value)
               }
-              else if(value.choice.includes('Rep')||value.choice.includes('(R)')){
+              else if(value.party.includes('Rep')||value.party.includes('(R)')){
                 newObj.r.push(value.value)
               }
             })
@@ -100,10 +113,18 @@ $('#myCarousel').carousel({
             var oldObj = raceHolder[value.topic]
             oldObj.moe.push(value.subpopulations[0].margin_of_error)
             $(value.subpopulations[0].responses).each(function(index, value){
-              if(value.choice.includes('Dem')||value.choice.includes('(D)')){
+              if(value.party===null){
+                if(value.choice.includes('Dem')||value.choice.includes('(D)')){
+                  oldObj.d.push(value.value)
+                }
+                else if(value.choice.includes('Rep')||value.choice.includes('(R)')){
+                  oldObj.r.push(value.value)
+                }
+              }
+              else if(value.party.includes('Dem')||value.party.includes('(D)')){
                 oldObj.d.push(value.value)
               }
-              else if(value.choice.includes('Rep')||value.choice.includes('(R)')){
+              else if(value.party.includes('Rep')||value.party.includes('(R)')){
                 oldObj.r.push(value.value)
               }
             })

@@ -11,5 +11,10 @@ class RacesController < ApplicationController
     render :json => response
   end
 
+  def nearby
+  end
+
+  def myrep
+  end
 
 end
