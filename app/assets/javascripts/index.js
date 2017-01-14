@@ -48,7 +48,9 @@ $('#myCarousel').carousel({
       var r = arrAv(val.r)
       var d = arrAv(val.d)
       var moe = arrAv(val.moe)
-      console.log(r, d, moe)
+      var dem = val.dem
+      var rep = val.rep
+      console.log(r, d, moe, dem, rep)
       if(Math.abs(r-d)<moe){
         console.log('close')
       }
@@ -81,7 +83,11 @@ $('#myCarousel').carousel({
     // })
   }
 
+
+$('newObj').append('#raceName')
+
   function groupRaces(data, state, race){
+    //call your function here
     var raceHolder = {}
     $(data).each(function(index, val){
       $(val.questions).each(function(index, value){
@@ -95,16 +101,20 @@ $('#myCarousel').carousel({
               if(value.party===null){
                 if(value.choice.includes('Dem')||value.choice.includes('(D)')){
                   newObj.d.push(value.value)
+                  newObj.dem = value.choice
                 }
                 else if(value.choice.includes('Rep')||value.choice.includes('(R)')){
                   newObj.r.push(value.value)
+                  newObj.rep = value.choice
                 }
               }
               else if(value.party.includes('Dem')||value.party.includes('(D)')){
                 newObj.d.push(value.value)
+                newObj.dem = value.choice
               }
               else if(value.party.includes('Rep')||value.party.includes('(R)')){
                 newObj.r.push(value.value)
+                newObj.rep = value.choice
               }
             })
           }

@@ -15,6 +15,7 @@ class RacesController < ApplicationController
   end
 
   def myrep
+
   end
 
 end
