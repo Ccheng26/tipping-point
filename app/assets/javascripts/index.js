@@ -1,6 +1,9 @@
 $(document).ready(function(){
 
-
+$('#myCarousel').carousel({
+    interval: 1000,
+    cycle: true
+});
   var geocoder;
 
 
@@ -40,6 +43,7 @@ $(document).ready(function(){
       var r = arrAv(val.r)
       var d = arrAv(val.d)
       var moe = arrAv(val.moe)
+      console.log(r, d, moe)
       if(Math.abs(r-d)<moe){
         console.log('close')
       }
