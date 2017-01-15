@@ -15,7 +15,7 @@ $('#myCarousel').carousel({
   function successFunction(position) {
       var lat = position.coords.latitude;
       var lng = position.coords.longitude;
-      getState(lat, lng)
+      getState(lat, lng);
   }
 
   function errorFunction(){
@@ -28,43 +28,90 @@ $('#myCarousel').carousel({
 
   function getState(lat, lng){
     var latlng = new google.maps.LatLng(lat, lng);
-    var raceType = $('#race-menu')[0].value
+    var raceType = $('#race-menu')[0].value;
     geocoder.geocode({'latLng': latlng}, function(results, status) {
-      var shortState = results[3].address_components[1].short_name
+      var shortState = results[3].address_components[1].short_name;
       $.ajax({
         "url": '/getdata',
         "method": "get",
         "data":{state: shortState, race: raceType.toLowerCase()}
       }).done(function(data){
-        console.log(data)
-        groupRaces(data, shortState, raceType)
-      })
-    })
+        console.log(data);
+        groupRaces(data, shortState, raceType);
+      });
+    });
   }
 
   function findCloseRaces(data){
-    console.log(data)
+    console.log(data);
     $.each(data, function(key, val){
-      var title = key
-      var r = Math.round(100*arrAv(val.r))/100
-      var d = Math.round(100*arrAv(val.d))/100
-      var moe = Math.round(100*arrAv(val.moe))/100
-      var dem = val.dem
-      var rep = val.rep
-      console.log(r, d, moe, dem, rep)
-      var target =$(".col-md-8")
-      $(target).append("<h3>"+ title + "</h3>" + "<hr />")
-      $(target).append("<h4>"+ dem + " (" + d + ") " + "V" + "</h4>" )
-      $(target).append("<h4>"+ rep + " (" + r + ") " + "V" + "</h4>")
-      $(target).append("<p>"+ "Margin of Error: " + moe + "</p>")
+      var title = key;
+      var r = Math.round(100*arrAv(val.r))/100;
+      var d = Math.round(100*arrAv(val.d))/100;
+      var moe = Math.round(100*arrAv(val.moe))/100;
+      var dem = val.dem;
+      var rep = val.rep;
+      console.log(r, d, moe, dem, rep);
+      // adding items to target class in body
+      var target =$(".col-md-4");
+      $(target).append("<h3>"+ title + "</h3>" + "<hr />");
+      $(target).append("<h4>"+ dem + " (" + d + ") " + "V" + "</h4>" );
+      $(target).append("<h4>"+ rep + " (" + r + ") " + "V" + "</h4>");
+      $(target).append("<p>"+ "Margin of Error: " + moe + "</p>");
 
       if(Math.abs(r-d)<moe){
-        console.log('close')
+        console.log('close');
+      }else{
+        console.log('not close');
       }
-      else{
-        console.log('not close')
-      }
-    })
+      //d3 visualization
+      var data = [{"Candidate": dem,"Percentage": r},{"Candidate":rep,"Percentage":d}];
+      // set the dimensions and margins of the graph
+      var margin = {top: 20, right: 0, bottom: 20, left: 200},
+          width = 600 - margin.left - margin.right,
+          height = 200 - margin.top - margin.bottom;
+      // set the ranges
+      var y = d3.scaleBand()
+                .range([150, 0])
+                .padding(0.1);
+      var x = d3.scaleLinear()
+                .range([0, 400]);
+
+      // append the svg object to the body of the page
+      // append a 'group' element to 'svg'
+      // moves the 'group' element to the top left margin
+      var target2 =$(".col-md-8");
+      var svg = d3.select("#target").append("svg")
+          .attr("width", width + margin.left + margin.right)
+          .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+          .attr("transform",
+                "translate(" + margin.left + "," + margin.top + ")");
+        // format the data
+        data.forEach(function(d) {
+          d.Percentage = +d.Percentage;
+        });
+        // Scale the range of the data in the domains
+        x.domain([0, d3.max(data, function(d){ return d.Percentage; })])
+        y.domain(data.map(function(d) { return d.Candidate; }));
+        //y.domain([0, d3.max(data, function(d) { return d.Percentage; })]);
+        // append the rectangles for the bar chart
+        svg.selectAll(".bar")
+            .data(data)
+          .enter().append("rect")
+            .attr("class", "bar")
+            //.attr("x", function(d) { return x(d.Percentage); })
+            .attr("width", function(d) {return x(d.Percentage); } )
+            .attr("y", function(d) { return y(d.Candidate); })
+            .attr("height", y.bandwidth());
+        // add the x Axis
+        svg.append("g")
+            .attr("transform", "translate(0," + height + ")")
+            .call(d3.axisBottom(x));
+        // add the y Axis
+        svg.append("g")
+            .call(d3.axisLeft(y));
+   })}
 
     // $(data).each(function(index, val){
     //   var moe;
@@ -88,7 +135,7 @@ $('#myCarousel').carousel({
     //   }
 
     // })
-  }
+
 
   function groupRaces(data, state, race){
     //call your function here
@@ -175,13 +222,12 @@ $('#myCarousel').carousel({
     return(biggest - next_biggest)
   }
 
-  $('#test').on('click', function(){
+
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(successFunction, errorFunction);
     }
-  })
-      if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(successFunction, errorFunction);
-    }
+
+
+
   initialize()
 })
