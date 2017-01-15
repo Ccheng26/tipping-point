@@ -5,5 +5,5 @@ Rails.application.routes.draw do
   get '/getdata', to: 'races#getdata'
   get '/nearby', to: 'races#nearby'
   get '/myrep', to: 'races#myrep'
-
+  get '/why', to: 'races#why'
 end

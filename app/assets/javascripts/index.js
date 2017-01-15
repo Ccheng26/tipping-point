@@ -1,4 +1,4 @@
-$(document).on('turbolinks:load',function(){
+$(document).on('turbolinks:load', function(){
 
 $('#myCarousel').carousel({
     interval: 2000,
@@ -31,6 +31,7 @@ $('#myCarousel').carousel({
     var raceType = $('#race-menu')[0].value;
     geocoder.geocode({'latLng': latlng}, function(results, status) {
       var shortState = results[3].address_components[1].short_name;
+      //if hidden element 1 is present
       $.ajax({
         "url": '/getdata',
         "method": "get",
@@ -39,6 +40,7 @@ $('#myCarousel').carousel({
         console.log(data);
         groupRaces(data, shortState, raceType);
       });
+      //else run civic api
     });
   }
 
@@ -197,7 +199,7 @@ $('#myCarousel').carousel({
     findCloseRaces(raceHolder)
   }
 
-  // {"2016 New York CD-19":{'R':[], 'D':[], 'moe':[]}}
+  // {"2016 New York CD-19":{'R':[], 'D':[], 'moe':[]}, }
 
   function arrAv(arr){
     var sum = arr.reduce(function(a, b) { return a + b; });
@@ -221,6 +223,7 @@ $('#myCarousel').carousel({
     }
     return(biggest - next_biggest)
   }
+
 
 
     if (navigator.geolocation) {
