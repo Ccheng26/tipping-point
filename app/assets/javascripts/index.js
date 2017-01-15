@@ -28,7 +28,7 @@ $('#myCarousel').carousel({
 
   function getState(lat, lng){
     var latlng = new google.maps.LatLng(lat, lng);
-    var raceType = $('#race-menu')[0].value;
+    var raceType = 'house' //$('#race-menu')[0].value;
     geocoder.geocode({'latLng': latlng}, function(results, status) {
       var shortState = results[3].address_components[1].short_name;
       //if hidden element 1 is present
