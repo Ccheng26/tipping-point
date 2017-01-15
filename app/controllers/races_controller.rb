@@ -12,6 +12,7 @@ class RacesController < ApplicationController
   end
 
   def nearby
+
   end
 
   def myrep

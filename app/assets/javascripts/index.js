@@ -1,7 +1,7 @@
 $(document).ready(function(){
 
 $('#myCarousel').carousel({
-    interval: 1000,
+    interval: 2000,
     cycle: true
 });
   var geocoder;
@@ -42,22 +42,21 @@ $('#myCarousel').carousel({
     })
   }
 
-
-
   function findCloseRaces(data){
     console.log(data)
     $.each(data, function(key, val){
-      var r = arrAv(val.r)
-      var d = arrAv(val.d)
-      var moe = arrAv(val.moe)
+      var title = key
+      var r = Math.round(100*arrAv(val.r))/100
+      var d = Math.round(100*arrAv(val.d))/100
+      var moe = Math.round(100*arrAv(val.moe))/100
       var dem = val.dem
       var rep = val.rep
       console.log(r, d, moe, dem, rep)
       var target =$(".col-md-8")
-      // $(target).append("<h3>"+ r + "</h3>")
-      $(target).append("<h4>"+ dem + "</h4>")
-      $(target).append("<h4>"+ rep + "</h4>")
-      $(target).append("<p>"+ moe + "</p>")
+      $(target).append("<h3>"+ title + "</h3>" + "<hr />")
+      $(target).append("<h4>"+ dem + " (" + d + ") " + "V" + "</h4>" )
+      $(target).append("<h4>"+ rep + " (" + r + ") " + "V" + "</h4>")
+      $(target).append("<p>"+ "Margin of Error: " + moe + "</p>")
 
       if(Math.abs(r-d)<moe){
         console.log('close')
@@ -181,5 +180,8 @@ $('#myCarousel').carousel({
       navigator.geolocation.getCurrentPosition(successFunction, errorFunction);
     }
   })
+      if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(successFunction, errorFunction);
+    }
   initialize()
 })
