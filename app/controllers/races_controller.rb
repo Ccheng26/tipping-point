@@ -19,4 +19,8 @@ class RacesController < ApplicationController
 
   end
 
+  def why
+  end
+
+
 end
