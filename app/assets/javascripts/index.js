@@ -42,6 +42,8 @@ $('#myCarousel').carousel({
     })
   }
 
+
+
   function findCloseRaces(data){
     console.log(data)
     $.each(data, function(key, val){
@@ -51,6 +53,12 @@ $('#myCarousel').carousel({
       var dem = val.dem
       var rep = val.rep
       console.log(r, d, moe, dem, rep)
+      var target =$(".col-md-8")
+      // $(target).append("<h3>"+ r + "</h3>")
+      $(target).append("<h4>"+ dem + "</h4>")
+      $(target).append("<h4>"+ rep + "</h4>")
+      $(target).append("<p>"+ moe + "</p>")
+
       if(Math.abs(r-d)<moe){
         console.log('close')
       }
@@ -83,11 +91,9 @@ $('#myCarousel').carousel({
     // })
   }
 
-
-$('newObj').append('#raceName')
-
   function groupRaces(data, state, race){
     //call your function here
+
     var raceHolder = {}
     $(data).each(function(index, val){
       $(val.questions).each(function(index, value){
