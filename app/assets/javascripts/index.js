@@ -1,10 +1,13 @@
+var geocoder;
+var latlng;
+
 $(document).on('turbolinks:load', function(){
 
 $('#myCarousel').carousel({
     interval: 2000,
     cycle: true
 });
-  var geocoder;
+
 
 //in find close races, grab congressional districts from keys
 //find service to convert CD to coordinates/zip code
@@ -27,11 +30,13 @@ $('#myCarousel').carousel({
   }
 
   function getState(lat, lng){
-    var latlng = new google.maps.LatLng(lat, lng);
-    var raceType = $('#race-menu')[0].value;
+    if(latlng===undefined){
+       latlng = new google.maps.LatLng(lat, lng);
+    }
     geocoder.geocode({'latLng': latlng}, function(results, status) {
       var shortState = results[3].address_components[1].short_name;
-      //if hidden element 1 is present
+      if($('#nearby-head')[0]){
+      var raceType = $('#race-menu')[0].value;
       $.ajax({
         "url": '/getdata',
         "method": "get",
@@ -40,7 +45,20 @@ $('#myCarousel').carousel({
         console.log(data);
         groupRaces(data, shortState, raceType);
       });
-      //else run civic api
+    }
+    else if ($('#my-rep-head')[0]){
+      var address = results[0].formatted_address
+      var cleanadd = address.replace(/,/g, "")
+      var addarr = cleanadd.split(' ')
+      var finaladd = addarr.join('+')
+      $.ajax({
+        "url": '/getrep',
+        "method": "get",
+        "data":{address: finaladd}
+      }).done(function(data){
+        console.log(data);
+      })
+    }
     });
   }
 
@@ -229,8 +247,7 @@ $('#myCarousel').carousel({
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(successFunction, errorFunction);
     }
-
-
-
-  initialize()
+    if(geocoder===undefined){
+    initialize()
+  }
 })

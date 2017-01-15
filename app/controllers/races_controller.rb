@@ -11,6 +11,12 @@ class RacesController < ApplicationController
     render :json => response
   end
 
+  def getrep
+    address = params[:address]
+    response = HTTParty.get('https://www.googleapis.com/civicinfo/v2/representatives?address='+address+'&key=')
+    render :json => response
+  end
+
   def nearby
 
   end
