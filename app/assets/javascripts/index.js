@@ -135,7 +135,7 @@ $('#myCarousel').carousel({
     findCloseRaces(raceHolder)
   }
 
-  // {"2016 New York CD-19":{'R':[], 'D':[], 'moe':[]}}
+  // {"2016 New York CD-19":{'R':[], 'D':[], 'moe':[]}, }
 
   function arrAv(arr){
     var sum = arr.reduce(function(a, b) { return a + b; });
@@ -160,10 +160,12 @@ $('#myCarousel').carousel({
     return(biggest - next_biggest)
   }
 
-  $('#test').on('click', function(){
+  $('.top-link').each(function(index, value){
+    value.on('click', function(){
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(successFunction, errorFunction);
-    }
+      }
+    })
   })
   initialize()
 })
